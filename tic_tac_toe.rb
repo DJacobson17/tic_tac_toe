@@ -16,10 +16,6 @@ class Player
     @name = gets.chomp.upcase
   end
 
-  def check_marker(marker)
-   
-    end
-
   def give_marker(player_number)
     validate_marker = false
     until validate_marker
