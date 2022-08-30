@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'pry-byebug'
+require 'colorize'
 
 class Player # rubocop:disable Style/Documentation
   attr_accessor :name, :marker, :score
@@ -38,6 +39,7 @@ end
 class Game # rubocop:disable Style/Documentation
   attr_accessor :game_over, :available, :display
   attr_reader :win_combos
+
   def initialize(p1, p2) # rubocop:disable Naming/MethodParameterName
     @p1 = p1
     @p2 = p2
@@ -45,7 +47,6 @@ class Game # rubocop:disable Style/Documentation
     @available = [1, 2, 3, 4, 5, 6, 7, 8, 9]
     @game_over = false
     play_game
-
   end
 
   private
@@ -75,31 +76,30 @@ class Game # rubocop:disable Style/Documentation
       combo.each do |i|
         arr << @display[i]
       end
-        binding.pry
-    if arr.all? 
-          puts "#{player.name} is the winner!"
-            player.score += 1
-            @game_over = true
-        end
-  end
+      next unless arr.all?(player.marker)
 
-
-  def check_draw
-    if available.empty?
-      puts "It's a draw."
+      puts "#{player.name} is the winner!"
+      display_board
+      player.score += 1
       @game_over = true
     end
-  end
 
-  def restart
-    puts 'Play again?'
-    replay = gets.chomp.upcase
-    if replay == 'Y'
-      Game(p1, p2)
-    else
-      display_board
-      puts 'Thanks for playing!'
-        end
+    def check_draw
+      if available.empty?
+        puts "It's a draw."
+        @game_over = true
+      end
+    end
+
+    def restart
+      puts 'Play again?'
+      replay = gets.chomp.upcase
+      if replay == 'Y'
+        Game.new(@p1, @p2)
+      else
+        display_board
+        puts 'Thanks for playing!'
+      end
     end
   end
 
