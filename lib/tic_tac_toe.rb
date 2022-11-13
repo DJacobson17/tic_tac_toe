@@ -8,16 +8,16 @@ class Game # rubocop:disable Style/Documentation
   attr_accessor :game_over, :available, :display
   attr_reader :win_combos
 
-  def initialize(p1, p2, display = %w[1 2 3 4 5 6 7 8 9]) # rubocop:disable Naming/MethodParameterName
+  def initialize(p1 = 'dave', p2 = 'erin', display = %w[1 2 3 4 5 6 7 8 9]) # rubocop:disable Naming/MethodParameterName
     @p1 = p1
     @p2 = p2
     @display = display
     @available = [1, 2, 3, 4, 5, 6, 7, 8, 9]
     @game_over = false
-    play_game
+    # play_game
   end
 
-  private
+  # private
 
   def play_game
     player = @p2
@@ -39,9 +39,12 @@ class Game # rubocop:disable Style/Documentation
 
   def player_input(player)  
     loop do 
-      puts "#{player.name} where would you like to go?"
+      puts "#{player.name} where would you like to go? Or type 'q' to quit."
       selection = gets.chomp
-      exit if selection == 'q'
+      if selection == 'q'
+        puts "Thanks for playing"
+        exit
+      end
       return selection.to_i if verify_selection(selection)
     end
   end
@@ -61,7 +64,7 @@ class Game # rubocop:disable Style/Documentation
 
       return true
     end
-    check_draw
+    check_draw ? true : false
   end
 
   def display_winner(player)
@@ -82,7 +85,7 @@ class Game # rubocop:disable Style/Documentation
     puts 'Play again?'
     replay = gets.chomp.upcase
     if replay == 'Y'
-      Game.new(@p1, @p2)
+      Game.new(@p1, @p2).play_game
     else
       display_board
       puts 'Thanks for playing!'
